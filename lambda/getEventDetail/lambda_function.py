@@ -73,8 +73,7 @@ def getEventDetail(event):
             eventId = %s
         ;
         """
-        cur.execute(query,(event['eventId']))
+        cur.execute(query,(event['queryStringParameters']['eventId']))
         result=cur.fetchone()
-        print(event['eventId'])
 
     return result

@@ -33,8 +33,6 @@ def lambda_handler(event, context):
     """
     # datetime型を含むitem
     item = getComment(event)
-    # default引数を指定して、JSON文字列を生成します
-    jsonstr = json.dumps(item, default=json_serial)
     
     response = {
         'statusCode': 200,
@@ -44,7 +42,7 @@ def lambda_handler(event, context):
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
             "Content-Type": "application/json"
         },
-        'body': json.loads(jsonstr)
+        'body': json.dumps(item, default=json_serial)
     }
     return response
 
@@ -67,7 +65,7 @@ def getComment(event):
             comment.eventId = %s
         ;
         """
-        cur.execute(query,(event['eventId']))
+        cur.execute(query,(event['queryStringParameters']['eventId']))
         result=cur.fetchall()
     return result
 

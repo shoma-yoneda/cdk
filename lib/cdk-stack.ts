@@ -34,6 +34,14 @@ export class CdkStack extends cdk.Stack {
     const lambdaRole = new iam.Role(this, 'MyLambdaRole', {
       assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
     });
+
+    // Custom CORS settings for the resource
+    const my_cors = {
+      allowOrigins: apigateway.Cors.ALL_ORIGINS,
+      allowMethods: ['GET', 'POST', 'OPTIONS'],
+      allowHeaders: ['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key', 'X-Amz-Security-Token'],
+      maxAge: cdk.Duration.seconds(3000),
+    };
     //////////////////////////////////////////////////   INDIVIDUAL    //////////////////////////////////////////////////
     //////////////////////////////////////////////////   lambda関数001   //////////////////////////////////////////////////
     const func001 = new lambda.Function(this, Constants.GET_EVENT, {
@@ -192,7 +200,7 @@ export class CdkStack extends cdk.Stack {
       const lambdaIntegration005 = new apigateway.LambdaIntegration(func005);
       const resource005 = restApi.root.addResource(Constants.POST_COMMENT);
       const method005 = resource005.addMethod('POST', lambdaIntegration005);
-  
+      resource005.addCorsPreflight(my_cors);
       // Add permissions to the API Gateway to call the Lambda function
       const lambdaPermission005 = new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,

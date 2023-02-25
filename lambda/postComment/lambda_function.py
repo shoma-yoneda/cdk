@@ -31,7 +31,7 @@ def lambda_handler(event, context):
     """
     This function fetches content from mysql RDS instance
     """
-
+    postComment(event)
     response = {
         'statusCode': 200,
         'headers': {
@@ -40,12 +40,17 @@ def lambda_handler(event, context):
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
             "Content-Type": "application/json"
         },
-        'body': json.dumps(postComment(event))
+        'body': json.dumps("OK")
     }
     return response
 
 #SQLの発行
 def postComment(event):
+    body = json.loads(event['body'])
+    eventId = body['eventId']
+    comment = body['comment']
+    userId = body['userId']
+    print(eventId)
     with conn.cursor() as cur:
         query = """
         INSERT INTO t_comment
@@ -60,8 +65,7 @@ def postComment(event):
             %s,
             %s
             )
-        ;
         """
-        cur.execute(query,(event['eventId'],event['comment'],event['userId']))
+        cur.execute(query,(eventId,comment,userId))
         conn.commit()
-    return 
+    return
