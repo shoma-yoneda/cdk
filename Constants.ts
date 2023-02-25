@@ -24,7 +24,14 @@ export class Constants {
 
     // FUNCTION LIST
     static readonly GET_EVENT: string = 'getEvent';
-    static readonly HOGEHOGE: string = 'getMajiManji';
-
-    
-  }
+    static readonly GET_EVENT_DETAIL: string = 'getEventDetail';
+    // static readonly PUT_PICTURE: string = 'putPicture';
+    static readonly GET_AREA: string = 'getArea';
+    static readonly GET_COMMENT: string = 'getComment';
+    static readonly GET_PREFECTURE: string = 'getPrefecture';
+    static readonly GET_RANKING: string = 'getRanking';
+    static readonly GET_RECOMMEND: string = 'getRecommend';
+    static readonly GET_VERIFY_USER: string = 'getVerifyUser';
+    static readonly POST_COMMENT: string = 'postComment';
+    static readonly POST_USER: string = 'postUser';
+}

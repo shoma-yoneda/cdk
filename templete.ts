@@ -1,4 +1,4 @@
-    // // lambda関数XXX
+    // //////////////////////////////////////////////////   lambda関数XXX   //////////////////////////////////////////////////
     // const funcXXX = new lambda.Function(this, Constants.HOGEHOGE, {
     //     functionName: Constants.HOGEHOGE,
     //     code: lambda.Code.fromAsset('lambda/'+Constants.HOGEHOGE),
