@@ -365,7 +365,7 @@ export class CdkStack extends cdk.Stack {
       const lambdaIntegration010 = new apigateway.LambdaIntegration(func010);
       const resource010 = restApi.root.addResource(Constants.POST_USER);
       const method010 = resource010.addMethod('POST', lambdaIntegration010);
-  
+      resource010.addCorsPreflight(my_cors);
       // Add permissions to the API Gateway to call the Lambda function
       const lambdaPermission010 = new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,

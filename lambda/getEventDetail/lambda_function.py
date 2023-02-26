@@ -56,7 +56,7 @@ def getEventDetail(event):
             DATE_FORMAT(eventStartDate, '%%Y年%%m月%%d日') as eventStartDate,
             DATE_FORMAT(eventEndDate, '%%Y年%%m月%%d日') as eventEndDate,
             eventDetail,
-            holdingTime,
+            eventTime,
             eventSpot,
             access,
             price,
