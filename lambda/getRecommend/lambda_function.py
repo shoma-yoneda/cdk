@@ -53,7 +53,7 @@ def getRecommend(event):
             eventId,
             eventName,
             eventArea,
-            eventSecondaryItem,
+            category,
             DATE_FORMAT(eventStartDate, '%m月%d日') as eventStartDate,
             DATE_FORMAT(eventEndDate, '%m月%d日') as eventEndDate,
             favorite
