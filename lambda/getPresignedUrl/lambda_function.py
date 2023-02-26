@@ -3,11 +3,21 @@ import boto3
 from botocore.client import Config
 
 def lambda_handler(event, context):
-    tmpType = str(event['contentType']).split('/')[1]
-    key = "fanta/asset/picture/profile/"+str(event['username'])+"."+tmpType # S3の保存先のパス
+    tmpType = str(event['queryStringParameters']['contentType']).split('/')[1]
+    # S3の保存先のパス
+    key = "fanta/asset/picture/profile/"+str(event['queryStringParameters']['userName'])+"."+tmpType
     content_type = str(event['contentType'])
-    
-    return generate_presigned_url(key, content_type)
+    response = {
+        'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+            "Content-Type": "application/json"
+        },
+        'body': generate_presigned_url(key, content_type)
+    }
+    return response
 
 def generate_presigned_url(key: str, content_type: str) -> str:
     s3_client = boto3.client("s3", config=Config(signature_version="s3v4")) 

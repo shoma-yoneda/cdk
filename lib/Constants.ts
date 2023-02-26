@@ -34,4 +34,6 @@ export class Constants {
     static readonly GET_VERIFY_USER: string = 'getVerifyUser';
     static readonly POST_COMMENT: string = 'postComment';
     static readonly POST_USER: string = 'postUser';
+    static readonly GET_PRESIGNED_URL: string = 'getPresignedUrl';
+    static readonly GET_USER: string = 'getUser';
 }
