@@ -36,4 +36,8 @@ export class Constants {
     static readonly POST_USER: string = 'postUser';
     static readonly GET_PRESIGNED_URL: string = 'getPresignedUrl';
     static readonly GET_USER: string = 'getUser';
+    static readonly GET_FAVORITE: string = 'getFavorite';
+    static readonly POST_FAVORITE: string = 'postFavorite';
+    static readonly GET_DONE: string = 'getDone';
+    static readonly POST_DONE: string = 'postDone';
 }

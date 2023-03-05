@@ -40,40 +40,34 @@ def lambda_handler(event, context):
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
             "Content-Type": "application/json"
         },
-        'body': json.dumps(getRecommend(event))
+        'body': json.dumps(getEvent(event))
     }
     return response
 
 #SQLの発行
-def getRecommend(event):
+def getEvent(event):
 
     with conn.cursor() as cur:
+        body = json.loads(event['body'])
+        userId = body['userId']
         query = """
-
         SELECT
-            e.eventId,
+            f.eventId,
             e.eventName,
             e.eventArea,
             e.category,
             DATE_FORMAT(e.eventStartDate, '%m月%d日') as eventStartDate,
             DATE_FORMAT(e.eventEndDate, '%m月%d日') as eventEndDate
         FROM
-            t_event AS e
-        INNER JOIN (
-            SELECT eventId, COUNT(*) AS cnt
-            FROM t_favorite
-            GROUP BY eventId
-            ) AS f
-        ON
-            e.eventId = f.eventId
-        ORDER BY
-            f.cnt DESC
-        LIMIT
-            6
+            t_favorite f
+        INNER JOIN
+            t_event e
+        IN
+            f.eventId = e.eventId
+        WHERE
+            f.userId = %s
         ;
         """
-        
-        cur.execute(query)
+        cur.execute(query,(userId))
         result=cur.fetchall()
-
     return result

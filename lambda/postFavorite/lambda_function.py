@@ -31,7 +31,7 @@ def lambda_handler(event, context):
     """
     This function fetches content from mysql RDS instance
     """
-
+    postUser(event)
     response = {
         'statusCode': 200,
         'headers': {
@@ -40,40 +40,30 @@ def lambda_handler(event, context):
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
             "Content-Type": "application/json"
         },
-        'body': json.dumps(getRecommend(event))
+        'body': json.dumps("OK")
     }
     return response
 
 #SQLの発行
-def getRecommend(event):
-
+def postUser(event):
+    body = json.loads(event['body'])
+    userId = body['userId']
+    eventId = body['eventId']
     with conn.cursor() as cur:
         query = """
-
-        SELECT
-            e.eventId,
-            e.eventName,
-            e.eventArea,
-            e.category,
-            DATE_FORMAT(e.eventStartDate, '%m月%d日') as eventStartDate,
-            DATE_FORMAT(e.eventEndDate, '%m月%d日') as eventEndDate
-        FROM
-            t_event AS e
-        INNER JOIN (
-            SELECT eventId, COUNT(*) AS cnt
-            FROM t_favorite
-            GROUP BY eventId
-            ) AS f
-        ON
-            e.eventId = f.eventId
-        ORDER BY
-            f.cnt DESC
-        LIMIT
-            6
+        INSERT INTO t_favorite
+            (
+            userId,
+            eventId
+            )
+        VALUES
+            (
+            %s,
+            %s
+            )
         ;
         """
+        cur.execute(query,(userId, eventId))
+        conn.commit()
         
-        cur.execute(query)
-        result=cur.fetchall()
-
-    return result
+    return 
