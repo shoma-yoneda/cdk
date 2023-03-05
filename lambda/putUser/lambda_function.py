@@ -49,30 +49,19 @@ def postUser(event):
     body = json.loads(event['body'])
     userId = body['userId']
     userName = body['userName']
-    birthday = body['birthday']
-    sex = body['sex']
-    prefecture = body['prefecture']
+    introduction = body['introduction']
     with conn.cursor() as cur:
         query = """
-        INSERT INTO t_user
-            (
-            userId,
-            userName,
-            birthday,
-            sex,
-            prefecture
-            )
-        VALUES
-            (
-            %s,
-            %s,
-            %s,
-            %s,
-            %s
-            )
+        UPDATE
+            t_users
+        SET
+            userName = CASE WHEN userName <> %s THEN %s ELSE userName END,
+            introduction = CASE WHEN introduction <> %s THEN %s ELSE introduction END
+        WHERE
+            userId = %s
         ;
         """
-        cur.execute(query,(userId, userName, birthday, sex, prefecture))
+        cur.execute(query,(userName, userName, introduction, introduction, userId))
         conn.commit()
         
     return

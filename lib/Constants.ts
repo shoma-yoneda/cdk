@@ -40,4 +40,5 @@ export class Constants {
     static readonly POST_FAVORITE: string = 'postFavorite';
     static readonly GET_DONE: string = 'getDone';
     static readonly POST_DONE: string = 'postDone';
+    static readonly PUT_USER: string = 'putUser';
 }
