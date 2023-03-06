@@ -31,7 +31,14 @@ def lambda_handler(event, context):
     """
     This function fetches content from mysql RDS instance
     """
-
+    param =  event['queryStringParameters']['param']
+    if param == 'before':
+        body = json.dumps(getEventBefore(event))
+    elif param == 'after':
+        body = json.dumps(getEventAfter(event))
+    else:
+        body = ''
+    
     response = {
         'statusCode': 200,
         'headers': {
@@ -40,32 +47,57 @@ def lambda_handler(event, context):
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
             "Content-Type": "application/json"
         },
-        'body': json.dumps(getEvent(event))
+        'body': body
     }
     return response
 
 #SQLの発行
-def getEvent(event):
-
+def getEventBefore(event):
+    userId =  event['queryStringParameters']['userId']
     with conn.cursor() as cur:
-        body = json.loads(event['body'])
-        userId = body['userId']
         query = """
         SELECT
             d.eventId,
             e.eventName,
             e.eventArea,
             e.category,
-            DATE_FORMAT(e.eventStartDate, '%m月%d日') as eventStartDate,
-            DATE_FORMAT(e.eventEndDate, '%m月%d日') as eventEndDate
+            DATE_FORMAT(e.eventStartDate, '%%m月%%d日') as eventStartDate,
+            DATE_FORMAT(e.eventEndDate, '%%m月%%d日') as eventEndDate
         FROM
             t_done d
         INNER JOIN
             t_event e
-        IN
-            f.eventId = e.eventId
+        ON
+            d.eventId = e.eventId
         WHERE
-            f.userId = %s
+            d.userId = %s AND
+            e.eventEndDate < CURDATE()
+        ;
+        """
+        cur.execute(query,(userId))
+        result=cur.fetchall()
+    return result
+def getEventAfter(event):
+    userId =  event['queryStringParameters']['userId']
+    with conn.cursor() as cur:
+        query = """
+        SELECT
+            d.eventId,
+            e.eventName,
+            e.eventArea,
+            e.category,
+            DATE_FORMAT(e.eventStartDate, '%%m月%%d日') as eventStartDate,
+            DATE_FORMAT(e.eventEndDate, '%%m月%%d日') as eventEndDate
+        FROM
+            t_done d
+        INNER JOIN
+            t_event e
+        ON
+            d.eventId = e.eventId
+        WHERE
+            d.userId = %s AND
+            e.eventEndDate >= CURDATE();
+            
         ;
         """
         cur.execute(query,(userId))

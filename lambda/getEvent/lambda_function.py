@@ -53,11 +53,13 @@ def getEvent(event):
             eventId,
             eventName,
             eventArea,
+            eventSpot,
             category,
             DATE_FORMAT(eventStartDate, '%m月%d日') as eventStartDate,
             DATE_FORMAT(eventEndDate, '%m月%d日') as eventEndDate,
             DATE_FORMAT(eventStartDate, '%Y-%m-%d') as eventStartDateForSearch,
-            DATE_FORMAT(eventEndDate, '%Y-%m-%d') as eventEndDateForSearch
+            DATE_FORMAT(eventEndDate, '%Y-%m-%d') as eventEndDateForSearch,
+            eventTime
         FROM
             t_event
         WHERE

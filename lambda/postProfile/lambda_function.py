@@ -53,15 +53,15 @@ def postUser(event):
     with conn.cursor() as cur:
         query = """
         UPDATE
-            t_users
+            t_user
         SET
             userName = CASE WHEN userName <> %s THEN %s ELSE userName END,
-            introduction = CASE WHEN introduction <> %s THEN %s ELSE introduction END
+            introduction = %s
         WHERE
             userId = %s
         ;
         """
-        cur.execute(query,(userName, userName, introduction, introduction, userId))
+        cur.execute(query,(userName, userName, introduction, userId))
         conn.commit()
         
     return

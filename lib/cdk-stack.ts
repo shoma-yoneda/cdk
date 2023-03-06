@@ -573,9 +573,9 @@ export class CdkStack extends cdk.Stack {
     lambdaRole.addToPolicy(lambdaPermission016);
     func016.grantInvoke(lambdaRole);
     //////////////////////////////////////////////////   lambda関数017   //////////////////////////////////////////////////
-    const func017 = new lambda.Function(this, Constants.PUT_USER, {
-      functionName: Constants.PUT_USER,
-      code: lambda.Code.fromAsset('lambda/'+Constants.PUT_USER),
+    const func017 = new lambda.Function(this, Constants.POST_PROFILE, {
+      functionName: Constants.POST_PROFILE,
+      code: lambda.Code.fromAsset('lambda/'+Constants.POST_PROFILE),
       runtime: lambda.Runtime.PYTHON_3_9,
       handler: Constants.HANDLER,
       environment: {
@@ -594,8 +594,8 @@ export class CdkStack extends cdk.Stack {
 
     // Define the integration between the API Gateway and Lambda function
     const lambdaIntegration017 = new apigateway.LambdaIntegration(func017);
-    const resource017 = restApi.root.addResource(Constants.PUT_USER);
-    const method017 = resource017.addMethod('PUT', lambdaIntegration017);
+    const resource017 = restApi.root.addResource(Constants.POST_PROFILE);
+    const method017 = resource017.addMethod('POST', lambdaIntegration017);
     resource017.addCorsPreflight(my_cors);
     // Add permissions to the API Gateway to call the Lambda function
     const lambdaPermission017 = new iam.PolicyStatement({

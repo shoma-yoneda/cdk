@@ -46,23 +46,22 @@ def lambda_handler(event, context):
 
 #SQLの発行
 def getEvent(event):
-
+    userId = event['queryStringParameters']['userId']
     with conn.cursor() as cur:
-        body = json.loads(event['body'])
-        userId = body['userId']
+        
         query = """
         SELECT
             f.eventId,
             e.eventName,
             e.eventArea,
             e.category,
-            DATE_FORMAT(e.eventStartDate, '%m月%d日') as eventStartDate,
-            DATE_FORMAT(e.eventEndDate, '%m月%d日') as eventEndDate
+            DATE_FORMAT(e.eventStartDate, '%%m月%%d日') as eventStartDate,
+            DATE_FORMAT(e.eventEndDate, '%%m月%%d日') as eventEndDate
         FROM
             t_favorite f
         INNER JOIN
             t_event e
-        IN
+        ON
             f.eventId = e.eventId
         WHERE
             f.userId = %s
