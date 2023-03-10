@@ -605,5 +605,38 @@ export class CdkStack extends cdk.Stack {
     });
     lambdaRole.addToPolicy(lambdaPermission017);
     func017.grantInvoke(lambdaRole);
+    //////////////////////////////////////////////////   lambda関数018   //////////////////////////////////////////////////
+    const func018 = new lambda.Function(this, Constants.POST_EVENT, {
+        functionName: Constants.POST_EVENT,
+        code: lambda.Code.fromAsset('lambda/'+Constants.POST_EVENT),
+        runtime: lambda.Runtime.PYTHON_3_9,
+        handler: Constants.HANDLER,
+        environment: {
+          DB_ENDPOINT: Constants.DB_ENDPOINT,
+          DB_NAME: Constants.DB_NAME,
+          DB_PASSWORD: Constants.DB_PASSWORD,
+          DB_USER: Constants.DB_USER
+        },
+        role: myRole,
+        vpc: myVpc,
+        securityGroups: [securityGroup],
+        vpcSubnets: {
+          subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
+        },
+      });
+  
+      // Define the integration between the API Gateway and Lambda function
+      const lambdaIntegration018 = new apigateway.LambdaIntegration(func018);
+      const resource018 = restApi.root.addResource(Constants.POST_EVENT);
+      const method018 = resource018.addMethod('POST', lambdaIntegration018);
+      resource018.addCorsPreflight(my_cors);
+      // Add permissions to the API Gateway to call the Lambda function
+      const lambdaPermission018 = new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: ['lambda:InvokeFunction'],
+      resources: [func018.functionArn],
+      });
+      lambdaRole.addToPolicy(lambdaPermission018);
+      func018.grantInvoke(lambdaRole);
   }
 }

@@ -41,4 +41,5 @@ export class Constants {
     static readonly GET_DONE: string = 'getDone';
     static readonly POST_DONE: string = 'postDone';
     static readonly POST_PROFILE: string = 'postProfile';
+    static readonly POST_EVENT: string = 'postEvent';
 }
