@@ -57,6 +57,7 @@ def postEvent(event):
             query = """
             INSERT INTO t_event
                 (
+                eventId,
                 host,
                 category,
                 eventArea,
@@ -75,30 +76,36 @@ def postEvent(event):
                 eventDetail,
                 exId
                 )
-            VALUES
-                (
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s
-                )
+            SELECT
+                MAX(eventId) + 1,
+                %s as host,
+                %s as category,
+                %s as eventArea,
+                %s as ccess,
+                %s as mapUrl,
+                %s as ticket,
+                %s as eventName,
+                %s as eventSpot,
+                %s as eventStartDate,
+                %s as eventEndDate,
+                %s as eventTime,
+                %s as guest,
+                %s as price,
+                %s as ticketUrl,
+                %s as eventUrl,
+                %s as eventDetail,
+                %s as exId
+            FROM
+                t_event
             ON DUPLICATE KEY
             UPDATE
-                exId = VALUES(exId)
-            ;
+                price = VALUES(price),
+                eventDetail = VALUES(eventDetail),
+                guest = VALUES(guest),
+                eventName = VALUES(eventName),
+                eventTime = VALUES(eventTime),
+                eventStartDate = VALUES(eventStartDate),
+                eventEndDate = VALUES(eventEndDate)
             """
             cur.execute(query,(
                             item['host'],

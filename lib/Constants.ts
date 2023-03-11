@@ -42,4 +42,6 @@ export class Constants {
     static readonly POST_DONE: string = 'postDone';
     static readonly POST_PROFILE: string = 'postProfile';
     static readonly POST_EVENT: string = 'postEvent';
+    static readonly DELETE_FAVORITE: string = 'deleteFavorite';
+    static readonly DELETE_DONE: string = 'deleteDone';
 }

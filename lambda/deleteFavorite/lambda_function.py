@@ -31,7 +31,7 @@ def lambda_handler(event, context):
     """
     This function fetches content from mysql RDS instance
     """
-
+    postUser(event)
     response = {
         'statusCode': 200,
         'headers': {
@@ -40,34 +40,25 @@ def lambda_handler(event, context):
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
             "Content-Type": "application/json"
         },
-        'body': json.dumps(getEvent(event))
+        'body': json.dumps("OK")
     }
     return response
-# CONCAT(DATE_FORMAT(eventStartDate, '%Y年%m月%d日'), "(", ELT(WEEKDAY(eventStartDate)+1, '月', '火', '水', '木', '金', '土', '日'), ")") AS eventStartDate,
-#SQLの発行
-def getEvent(event):
 
+#SQLの発行
+def postUser(event):
+    body = json.loads(event['body'])
+    userId = body['userId']
+    eventId = body['eventId']
     with conn.cursor() as cur:
         query = """
-        SELECT
-            eventId,
-            eventName,
-            eventArea,
-            eventSpot,
-            category,
-            DATE_FORMAT(eventStartDate, '%m月%d日') as eventStartDate,
-            DATE_FORMAT(eventEndDate, '%m月%d日') as eventEndDate,
-            DATE_FORMAT(eventStartDate, '%Y-%m-%d') as eventStartDateForSearch,
-            DATE_FORMAT(eventEndDate, '%Y-%m-%d') as eventEndDateForSearch,
-            eventTime
-        FROM
-            t_event
+        DELETE FROM
+            t_favorite
         WHERE
-            eventStartDate >= CURDATE()
-        ORDER BY
-            eventStartDate ASC, eventTime ASC
+            userId = %s AND
+            eventId = %s
         ;
         """
-        cur.execute(query)
-        result=cur.fetchall()
-    return result
+        cur.execute(query,(userId, eventId))
+        conn.commit()
+        
+    return 
